@@ -1,0 +1,98 @@
+<!DOCTYPE html> <!-- Déclare le type de document HTML -->
+<html lang="fr"> <!-- Langue de la page -->
+
+<head>
+    <meta charset="UTF-8"> <!-- Encodage des caractères -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Responsive -->
+    <title>Sondage numérique</title>
+</head>
+
+<body>
+
+    <!-- Titre principal -->
+    <h1>Sondage sur les habitudes numériques</h1>
+
+    <!-- Explication -->
+    <p>Merci de répondre à ce questionnaire.</p>
+
+    <!-- Début du formulaire -->
+    <!-- id = pour le JavaScript -->
+    <form id="formulaire">
+
+        <!-- Champ texte -->
+        <p>
+            <label for="prenom">Votre prénom :</label><br>
+            <!-- input type text = champ de saisie -->
+            <input type="text" id="prenom" required>
+        </p>
+
+        <!-- Question à choix unique -->
+        <p>Utilisez-vous Internet tous les jours ?</p>
+
+        <!-- radio = une seule réponse possible -->
+        <input type="radio" name="internet" value="Oui" required>
+        <label>Oui</label><br>
+
+        <input type="radio" name="internet" value="Non">
+        <label>Non</label>
+
+        <!-- Liste déroulante -->
+        <p>Quel appareil utilisez-vous le plus ?</p>
+
+        <select id="appareil" required>
+            <option value="">-- Choisir --</option>
+            <option>Téléphone</option>
+            <option>Ordinateur</option>
+            <option>Tablette</option>
+        </select>
+
+        <!-- Zone de texte -->
+        <p>
+            <label for="commentaire">Commentaire :</label><br>
+            <textarea id="commentaire" rows="4" cols="40"></textarea>
+        </p>
+
+        <!-- Bouton d'envoi -->
+        <button type="submit">Enregistrer</button>
+
+    </form>
+
+    <!-- Script JavaScript -->
+    <script>
+
+        // On écoute l'envoi du formulaire
+        document.getElementById("formulaire").addEventListener("submit", function(e) {
+
+            e.preventDefault(); // Empêche le rechargement de la page
+
+            // Récupération des données saisies
+            const prenom = document.getElementById("prenom").value;
+
+            // Récupère la valeur du bouton radio sélectionné
+            const internet = document.querySelector('input[name="internet"]:checked').value;
+
+            const appareil = document.getElementById("appareil").value;
+            const commentaire = document.getElementById("commentaire").value;
+
+            // Création d'une ligne CSV
+            const ligne = `${prenom};${internet};${appareil};${commentaire}\n`;
+
+            // Création d'un fichier (Blob)
+            const blob = new Blob([ligne], { type: "text/csv" });
+
+            // Création d’un lien temporaire pour télécharger le fichier
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+
+            a.href = url;
+            a.download = "reponse.csv"; // nom du fichier
+            a.click(); // déclenche le téléchargement
+
+            // Nettoyage
+            URL.revokeObjectURL(url);
+        });
+
+    </script>
+
+</body>
+</html>
